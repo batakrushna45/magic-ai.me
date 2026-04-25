@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MAGIC AI Portal</title>
+  <style>
+    /* ── Reset & Base ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:      #FF6B00;
+      --orange-lite: #FF8C38;
+      --orange-dim:  #7A3300;
+      --bg:          #0A0A0A;
+      --surface:     #111111;
+      --surface2:    #1A1A1A;
+      --border:      #2A2A2A;
+      --text:        #F0F0F0;
+      --muted:       #888888;
+      --success:     #22C55E;
+      --error:       #EF4444;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 60px;
+    }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    header {
+      width: 100%;
+      max-width: 680px;
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--orange);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1px;
+    }
+
+    .logo-text {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span { color: var(--orange); }
+
+    header p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    /* ── Card ───────────────────────────────────────────────── */
+    .card {
+      width: 100%;
+      max-width: 680px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 28px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--orange);
+      margin-bottom: 18px;
+    }
+
+    /* ── Search ─────────────────────────────────────────────── */
+    .search-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"], input[type="email"] {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 15px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus, input[type="email"]:focus {
+      border-color: var(--orange);
+    }
+
+    input::placeholder { color: var(--muted); }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 11px 22px;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    button:active { transform: scale(0.97); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .btn-primary {
+      background: var(--orange);
+      color: #fff;
+    }
+
+    .btn-primary:hover:not(:disabled) { background: var(--orange-lite); }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover:not(:disabled) { border-color: var(--orange); }
+
+    /* ── Info Grid ──────────────────────────────────────────── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 480px) { .info-grid { grid-template-columns: 1fr; } }
+
+    .info-item { display: flex; flex-direction: column; gap: 3px; }
+
+    .info-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+    }
+
+    .info-value {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--orange-dim);
+      color: var(--orange-lite);
+      letter-spacing: 0.4px;
+    }
+
+    /* ── Form ───────────────────────────────────────────────── */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    /* ── Notice row ─────────────────────────────────────────── */
+    .rows-notice {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      background: var(--surface2);
+      border-radius: 6px;
+      border-left: 3px solid var(--orange-dim);
+    }
+
+    /* ── Alert ──────────────────────────────────────────────── */
+    .alert {
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .alert-error   { background: #2D0A0A; border: 1px solid #7F1D1D; color: #FCA5A5; }
+    .alert-success { background: #052E16; border: 1px solid #14532D; color: #86EFAC; }
+    .alert-info    { background: #0C1A2E; border: 1px solid #1E3A5F; color: #7DD3FC; }
+
+    /* ── Spinner ────────────────────────────────────────────── */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Divider ────────────────────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 22px 0;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      margin-top: 40px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* ── Hidden ─────────────────────────────────────────────── */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <div class="logo-icon">M</div>
+      <div class="logo-text"><span>MAGIC</span> AI Portal</div>
+    </div>
+    <p>Look up your IR details and update your email &amp; referrer information</p>
+  </header>
+
+  <!-- ── STEP 1: Search ──────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-title">🔍 Search by IR ID</div>
+
+    <div id="searchAlert" class="alert hidden"></div>
+
+    <div class="search-row">
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Enter your IR ID (e.g. IN109895)"
+        maxlength="30"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button id="searchBtn" class="btn-primary" onclick="doSearch()">Search</button>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: Results ─────────────────────────────────────── -->
+  <div id="resultsCard" class="card hidden">
+    <div class="card-title">📋 Your IR Details</div>
+
+    <div id="rowsNotice" class="rows-notice hidden"></div>
+
+    <div id="infoGrid" class="info-grid"></div>
+
+    <hr class="divider" />
+
+    <!-- Update Form -->
+    <div class="card-title">✏️ Update Your Details</div>
+
+    <div id="updateAlert" class="alert hidden"></div>
+
+    <div class="form-group">
+      <label class="form-label" for="emailInput">Email Address</label>
+      <input id="emailInput" type="email" placeholder="you@example.com" />
+      <span class="form-hint">Leave blank to keep existing value</span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="referrerInput">Referrer IR ID</label>
+      <input id="referrerInput" type="text" placeholder="e.g. IN000001" maxlength="30" spellcheck="false" />
+      <span class="form-hint">Leave blank to keep existing value</span>
+    </div>
+
+    <div class="form-actions">
+      <button id="saveBtn" class="btn-primary" onclick="doUpdate()">Save Details</button>
+      <button class="btn-secondary" onclick="resetAll()">Search Again</button>
+    </div>
+  </div>
+
+  <footer>MAGIC AI Genealogy Portal &mdash; Data is read directly from Google Sheets</footer>
+
+  <script>
+    // ── CONFIGURATION ─────────────────────────────────────────
+    // Paste your Apps Script Web App URL here after deploying.
+    // It looks like: https://script.google.com/macros/s/AKfycb.../exec
+    var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKty8jVFsz4IRcDNE6H6TVngWSm6fXGVxtTQam9oqJEwGvwL3NbaLySxMuTnQxDlHMwA/exec';
+    // ─────────────────────────────────────────────────────────
+
+    var currentIrId  = '';   // The IR ID we found
+    var callbackIdx  = 0;    // Counter for unique JSONP callback names
+
+    // ── SEARCH ───────────────────────────────────────────────
+    function doSearch() {
+      var rawId = document.getElementById('searchInput').value.trim().toUpperCase();
+
+      clearAlert('searchAlert');
+
+      if (!rawId || rawId.length < 2) {
+        showAlert('searchAlert', 'error', 'Please enter a valid IR ID.');
+        return;
+      }
+
+      if (APPS_SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+        showAlert('searchAlert', 'error',
+          '⚠️ Setup needed: open index.html and paste your Apps Script Web App URL into APPS_SCRIPT_URL.');
+        return;
+      }
+
+      setSearchLoading(true);
+
+      jsonp(APPS_SCRIPT_URL, { action: 'search', ir_id: rawId }, function(res) {
+        setSearchLoading(false);
+
+        if (res.error) {
+          showAlert('searchAlert', 'error', res.error);
+          return;
+        }
+
+        if (!res.found) {
+          showAlert('searchAlert', 'error',
+            'No record found for IR ID "' + rawId + '". Please check and try again.');
+          return;
+        }
+
+        currentIrId = rawId;
+        renderResults(res.data, res.allRows || [res.data]);
+      });
+    }
+
+    // ── RENDER RESULTS ───────────────────────────────────────
+    function renderResults(primary, allRows) {
+      var grid = document.getElementById('infoGrid');
+      grid.innerHTML = '';
+
+      var fields = [
+        { label: 'IR ID',            value: primary.ir_id },
+        { label: 'Full Name',         value: primary.name },
+        { label: 'Level',             value: primary.level, badge: true },
+        { label: 'Left / Right',      value: primary.left_right || '—' },
+        { label: 'BV',                value: primary.bv },
+        { label: 'RSP Total',         value: primary.rsp_total },
+        { label: 'Parent IR ID',      value: primary.parent_ir_id || '—' },
+        { label: 'Parent Name',       value: primary.parent_name  || '—' },
+        { label: 'Direct Downlines',  value: primary.direct_downlines },
+        { label: 'Source',            value: primary.source || '—' },
+      ];
+
+      fields.forEach(function(f) {
+        var item = document.createElement('div');
+        item.className = 'info-item';
+        item.innerHTML =
+          '<span class="info-label">' + esc(f.label) + '</span>' +
+          (f.badge
+            ? '<span class="badge">' + esc(f.value) + '</span>'
+            : '<span class="info-value">' + esc(f.value) + '</span>');
+        grid.appendChild(item);
+      });
+
+      // Show notice if multiple rows will be updated
+      var notice = document.getElementById('rowsNotice');
+      if (allRows.length > 1) {
+        notice.textContent =
+          'ℹ️ ' + allRows.length + ' rows share this IR ID (with different TC suffixes). ' +
+          'Saving will update all of them.';
+        notice.classList.remove('hidden');
+      } else {
+        notice.classList.add('hidden');
+      }
+
+      // Pre-fill existing email / referrer if already saved
+      document.getElementById('emailInput').value    = primary.email          || '';
+      document.getElementById('referrerInput').value = primary.referrer_ir_id || '';
+
+      clearAlert('updateAlert');
+      document.getElementById('resultsCard').classList.remove('hidden');
+      document.getElementById('resultsCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── UPDATE ───────────────────────────────────────────────
+    function doUpdate() {
+      var email    = document.getElementById('emailInput').value.trim();
+      var referrer = document.getElementById('referrerInput').value.trim().toUpperCase();
+
+      clearAlert('updateAlert');
+
+      if (!email && !referrer) {
+        showAlert('updateAlert', 'error', 'Please enter at least an email address or a referrer IR ID.');
+        return;
+      }
+
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showAlert('updateAlert', 'error', 'Please enter a valid email address.');
+        return;
+      }
+
+      setSaveLoading(true);
+
+      jsonp(APPS_SCRIPT_URL, {
+        action:   'update',
+        ir_id:    currentIrId,
+        email:    email,
+        referrer: referrer,
+      }, function(res) {
+        setSaveLoading(false);
+
+        if (res.error) {
+          showAlert('updateAlert', 'error', res.error);
+          return;
+        }
+
+        showAlert('updateAlert', 'success', '✅ ' + (res.message || 'Details saved successfully!'));
+      });
+    }
+
+    // ── JSONP ─────────────────────────────────────────────────
+    function jsonp(url, params, callback) {
+      var cbName = '__mpCb' + (++callbackIdx) + '_' + Date.now();
+
+      window[cbName] = function(data) {
+        delete window[cbName];
+        document.head.removeChild(script);
+        callback(data);
+      };
+
+      params.callback = cbName;
+
+      var qs = Object.keys(params)
+        .map(function(k) { return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]); })
+        .join('&');
+
+      var script = document.createElement('script');
+      script.src = url + '?' + qs;
+
+      script.onerror = function() {
+        delete window[cbName];
+        try { document.head.removeChild(script); } catch(e) {}
+        callback({ error: 'Network error. Check your Apps Script URL and make sure the Web App is deployed as "Anyone".' });
+      };
+
+      // Timeout after 15 seconds
+      var timer = setTimeout(function() {
+        if (window[cbName]) {
+          delete window[cbName];
+          try { document.head.removeChild(script); } catch(e) {}
+          callback({ error: 'Request timed out. Please try again.' });
+        }
+      }, 15000);
+
+      script.addEventListener('load', function() { clearTimeout(timer); });
+
+      document.head.appendChild(script);
+    }
+
+    // ── UI Helpers ────────────────────────────────────────────
+    function showAlert(id, type, msg) {
+      var el = document.getElementById(id);
+      el.className = 'alert alert-' + type;
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+
+    function clearAlert(id) {
+      var el = document.getElementById(id);
+      el.classList.add('hidden');
+      el.textContent = '';
+    }
+
+    function setSearchLoading(on) {
+      var btn = document.getElementById('searchBtn');
+      var inp = document.getElementById('searchInput');
+      btn.disabled = on;
+      inp.disabled = on;
+      btn.innerHTML = on ? '<span class="spinner"></span>Searching…' : 'Search';
+    }
+
+    function setSaveLoading(on) {
+      var btn = document.getElementById('saveBtn');
+      btn.disabled = on;
+      btn.innerHTML = on ? '<span class="spinner"></span>Saving…' : 'Save Details';
+    }
+
+    function resetAll() {
+      document.getElementById('resultsCard').classList.add('hidden');
+      document.getElementById('searchInput').value = '';
+      clearAlert('searchAlert');
+      clearAlert('updateAlert');
+      currentIrId = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function esc(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Allow Enter key in search box
+    document.getElementById('searchInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') doSearch();
+    });
+  </script>
+</body>
+</html>
