@@ -18,6 +18,10 @@
       --border:      #2A2A2A;
       --text:        #F0F0F0;
       --muted:       #888888;
+      --green:       #22C55E;
+      --green-bg:    #052E16;
+      --green-border:#14532D;
+      --red:         #EF4444;
     }
 
     body {
@@ -31,147 +35,180 @@
       padding: 24px 16px 60px;
     }
 
-    /* Header */
-    header {
-      width: 100%;
-      max-width: 680px;
-      text-align: center;
-      margin-bottom: 36px;
-    }
-    .logo { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    /* ── Header ─────────────────────────────────────────────── */
+    header { width: 100%; max-width: 760px; text-align: center; margin-bottom: 28px; }
+    .logo  { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 6px; }
     .logo-icon {
-      width: 44px; height: 44px;
-      background: var(--orange); border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; font-weight: 900; color: #fff;
+      width: 44px; height: 44px; background: var(--orange);
+      border-radius: 10px; display: flex; align-items: center;
+      justify-content: center; font-size: 22px; font-weight: 900; color: #fff;
     }
     .logo-text { font-size: 26px; font-weight: 800; }
     .logo-text span { color: var(--orange); }
-    header p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+    header p { color: var(--muted); font-size: 13px; margin-top: 4px; }
 
-    /* Card */
+    /* ── Card ───────────────────────────────────────────────── */
     .card {
-      width: 100%; max-width: 680px;
+      width: 100%; max-width: 760px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 28px;
-      margin-bottom: 20px;
+      padding: 24px 28px;
+      margin-bottom: 18px;
     }
     .card-title {
-      font-size: 13px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.8px;
-      color: var(--orange); margin-bottom: 18px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--orange); margin-bottom: 16px;
     }
 
-    /* Search row + autocomplete wrapper */
-    .search-wrap { position: relative; }
-    .search-row { display: flex; gap: 10px; }
+    /* ── VAmbassador Dropdown ───────────────────────────────── */
+    .field-label {
+      display: block; font-size: 11px; font-weight: 700;
+      color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.6px; margin-bottom: 7px;
+    }
+    select {
+      width: 100%; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-size: 15px;
+      padding: 11px 36px 11px 14px; outline: none;
+      transition: border-color 0.2s; cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      margin-bottom: 16px;
+    }
+    select:focus { border-color: var(--orange); }
+    select option { background: #1A1A1A; }
 
-    /* Autocomplete dropdown */
+    /* ── Search ─────────────────────────────────────────────── */
+    .search-wrap { position: relative; }
+    .search-row  { display: flex; gap: 10px; }
+
     .autocomplete-list {
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0;
-      right: 80px; /* leave space for button */
+      position: absolute; top: calc(100% + 4px);
+      left: 0; right: 100px;
       background: var(--surface3);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      z-index: 100;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      border: 1px solid var(--border); border-radius: 8px;
+      overflow: hidden; z-index: 100;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
     }
     .autocomplete-list.hidden { display: none; }
     .ac-item {
-      padding: 10px 14px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.1s;
+      padding: 10px 14px; cursor: pointer;
+      display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid var(--border); transition: background 0.1s;
     }
     .ac-item:last-child { border-bottom: none; }
     .ac-item:hover, .ac-item.active { background: var(--orange-dim); }
-    .ac-id   { font-size: 13px; font-weight: 700; color: var(--orange-lite); }
-    .ac-name { font-size: 12px; color: var(--muted); }
-    .ac-loading { padding: 10px 14px; color: var(--muted); font-size: 13px; }
+    .ac-id   { font-size: 13px; font-weight: 700; color: var(--orange-lite); min-width: 90px; }
+    .ac-name { font-size: 13px; color: var(--text); }
+    .ac-msg  { padding: 10px 14px; color: var(--muted); font-size: 13px; }
 
-    /* Inputs */
+    /* ── Inputs ─────────────────────────────────────────────── */
     input[type="text"], input[type="email"] {
-      flex: 1;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: 15px;
-      padding: 11px 14px;
-      outline: none;
-      transition: border-color 0.2s;
+      flex: 1; width: 100%;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text); font-size: 15px;
+      padding: 11px 14px; outline: none; transition: border-color 0.2s;
     }
-    input:focus { border-color: var(--orange); }
+    input:focus      { border-color: var(--orange); }
     input::placeholder { color: var(--muted); }
+    input:read-only  { opacity: 0.65; cursor: default; }
+    input.is-found   { border-color: var(--green); }
+    input.is-missing { border-color: var(--red); }
 
-    /* Buttons */
+    /* ── Buttons ────────────────────────────────────────────── */
     button {
       cursor: pointer; border: none; border-radius: 8px;
-      font-size: 14px; font-weight: 700;
-      padding: 11px 22px;
-      transition: opacity 0.15s, transform 0.1s;
-      white-space: nowrap;
+      font-size: 14px; font-weight: 700; padding: 11px 22px;
+      transition: background 0.15s, transform 0.1s; white-space: nowrap;
     }
     button:active { transform: scale(0.97); }
-    button:disabled { opacity: 0.45; cursor: not-allowed; }
-    .btn-primary { background: var(--orange); color: #fff; }
-    .btn-primary:hover:not(:disabled) { background: var(--orange-lite); }
-    .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-    .btn-secondary:hover:not(:disabled) { border-color: var(--orange); }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-orange { background: var(--orange); color: #fff; }
+    .btn-orange:hover:not(:disabled) { background: var(--orange-lite); }
+    .btn-ghost  { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost:hover:not(:disabled)  { border-color: var(--orange); color: var(--orange-lite); }
 
-    /* Info grid */
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    @media (max-width: 480px) { .info-grid { grid-template-columns: 1fr; } }
+    /* ── IR Details Grid ────────────────────────────────────── */
+    .details-header {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--surface2); border-radius: 10px;
+      padding: 16px 18px; margin-bottom: 18px;
+    }
+    .dh-id   { font-size: 22px; font-weight: 800; color: var(--orange); }
+    .dh-name { font-size: 16px; font-weight: 600; color: var(--text); }
+    .dh-sep  { color: var(--border); font-size: 20px; }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 6px;
+    }
+    @media (max-width: 600px) { .info-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 360px) { .info-grid { grid-template-columns: 1fr; } }
+
     .info-item { display: flex; flex-direction: column; gap: 3px; }
-    .info-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); }
-    .info-value { font-size: 15px; font-weight: 500; }
-    .badge {
+    .info-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.7px; color: var(--muted);
+    }
+    .info-value { font-size: 14px; font-weight: 500; word-break: break-all; }
+    .info-value.num { font-variant-numeric: tabular-nums; }
+    .badge-depth {
       display: inline-block; font-size: 11px; font-weight: 700;
-      padding: 2px 8px; border-radius: 99px;
+      padding: 2px 10px; border-radius: 99px;
       background: var(--orange-dim); color: var(--orange-lite);
     }
+    .tag-pos {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 2px 8px; border-radius: 4px; background: #1E3A5F; color: #7DD3FC;
+    }
+    .status-active   { color: var(--green); font-weight: 700; }
+    .status-inactive { color: var(--red);   font-weight: 700; }
 
-    /* Form */
-    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-    .form-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-hint { font-size: 11px; color: var(--muted); margin-top: 3px; }
-    .form-actions { display: flex; gap: 10px; margin-top: 4px; }
-
-    /* Rows notice */
+    /* ── Rows notice ────────────────────────────────────────── */
     .rows-notice {
-      font-size: 12px; color: var(--muted); margin-bottom: 18px;
+      font-size: 12px; color: var(--muted);
       padding: 8px 12px; background: var(--surface2);
-      border-radius: 6px; border-left: 3px solid var(--orange-dim);
+      border-radius: 6px; border-left: 3px solid var(--orange);
+      margin-bottom: 18px;
     }
 
-    /* Alerts */
-    .alert { border-radius: 8px; padding: 11px 14px; font-size: 14px; margin-bottom: 16px; }
-    .alert-error   { background: #2D0A0A; border: 1px solid #7F1D1D; color: #FCA5A5; }
-    .alert-success { background: #052E16; border: 1px solid #14532D; color: #86EFAC; }
+    /* ── Update Form ────────────────────────────────────────── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.span2 { grid-column: 1 / -1; }
+    .form-hint   { font-size: 11px; color: var(--muted); }
+    .ref-status  { font-size: 11px; margin-top: 2px; }
+    .ref-found   { color: var(--green); }
+    .ref-missing { color: var(--red); }
+    .ref-loading { color: var(--muted); }
 
-    /* Spinner */
+    .form-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+    /* ── Alerts ─────────────────────────────────────────────── */
+    .alert { border-radius: 8px; padding: 11px 14px; font-size: 14px; margin-bottom: 14px; }
+    .alert-error   { background: #2D0A0A; border: 1px solid #7F1D1D; color: #FCA5A5; }
+    .alert-success { background: var(--green-bg); border: 1px solid var(--green-border); color: #86EFAC; }
+
+    /* ── Divider ────────────────────────────────────────────── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+
+    /* ── Spinner ────────────────────────────────────────────── */
     .spinner {
-      display: inline-block; width: 16px; height: 16px;
+      display: inline-block; width: 15px; height: 15px;
       border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
       border-radius: 50%; animation: spin 0.7s linear infinite;
       vertical-align: middle; margin-right: 6px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Divider */
-    .divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
-
-    /* Footer */
-    footer { margin-top: 40px; color: var(--muted); font-size: 12px; text-align: center; }
-
+    footer  { margin-top: 36px; color: var(--muted); font-size: 12px; text-align: center; }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -182,12 +219,37 @@
       <div class="logo-icon">M</div>
       <div class="logo-text"><span>MAGIC</span> AI Portal</div>
     </div>
-    <p>Look up your IR details and update your email &amp; referrer information</p>
+    <p>Select your VAmbassador · Search your IR ID · Update your details</p>
   </header>
 
-  <!-- Search Card -->
+  <!-- ── Card 1: Select + Search ─────────────────────────────── -->
   <div class="card">
-    <div class="card-title">🔍 Search by IR ID</div>
+    <div class="card-title">🔽 Step 1 — Select VAmbassador</div>
+
+    <label class="field-label" for="vambSelect">VAmbassador Name</label>
+    <select id="vambSelect" onchange="onVambChange()">
+      <option value="">— Select VAmbassador —</option>
+      <option>AVP ARPIT</option>
+      <option>AVP MOHAMMAD</option>
+      <option>AVP NAEEM</option>
+      <option>AVP SHALLU</option>
+      <option>VC ARJUN</option>
+      <option>VC ASHOK</option>
+      <option>VC ATAR</option>
+      <option>VC AZIZ</option>
+      <option>VC BATAKRUSHNA</option>
+      <option>VC DEEPENDRA</option>
+      <option>VC KARTIK</option>
+      <option>VC MAMTA</option>
+      <option>VC BAGGA</option>
+      <option>VC RAMSUKH</option>
+      <option>VC RAHI</option>
+      <option>VC VISHNU</option>
+      <option>VP BRIJESH</option>
+      <option>VP YASHU</option>
+    </select>
+
+    <div class="card-title">🔍 Step 2 — Search IR ID</div>
     <div id="searchAlert" class="alert hidden"></div>
 
     <div class="search-wrap">
@@ -195,69 +257,123 @@
         <input
           id="searchInput"
           type="text"
-          placeholder="Type your IR ID (e.g. IN109895)"
+          placeholder="Enter IR ID (e.g. AB506666) — type 3+ chars for suggestions"
           maxlength="30"
           autocomplete="off"
           spellcheck="false"
+          disabled
         />
-        <button id="searchBtn" class="btn-primary" onclick="doSearch()">Search</button>
+        <button id="searchBtn" class="btn-orange" onclick="doSearch()" disabled>Search</button>
       </div>
-
-      <!-- Autocomplete dropdown -->
       <div id="acList" class="autocomplete-list hidden"></div>
     </div>
   </div>
 
-  <!-- Results Card -->
+  <!-- ── Card 2: Results + Update ────────────────────────────── -->
   <div id="resultsCard" class="card hidden">
-    <div class="card-title">📋 Your IR Details</div>
+
+    <!-- IR details header -->
+    <div class="details-header">
+      <div>
+        <div class="dh-id" id="displayIrId">—</div>
+        <div class="dh-name" id="displayIrName">—</div>
+      </div>
+    </div>
+
     <div id="rowsNotice" class="rows-notice hidden"></div>
-    <div id="infoGrid" class="info-grid"></div>
+
+    <div class="info-grid" id="infoGrid"></div>
 
     <hr class="divider" />
 
-    <div class="card-title">✏️ Update Your Details</div>
+    <div class="card-title">✏️ Step 3 — Update Details</div>
     <div id="updateAlert" class="alert hidden"></div>
 
-    <div class="form-group">
-      <label class="form-label" for="emailInput">Email Address</label>
-      <input id="emailInput" type="email" placeholder="you@example.com" />
-      <span class="form-hint">Leave blank to keep existing value</span>
-    </div>
+    <div class="form-grid">
 
-    <div class="form-group">
-      <label class="form-label" for="referrerInput">Referrer IR ID</label>
-      <input id="referrerInput" type="text" placeholder="e.g. IN000001" maxlength="30" spellcheck="false" />
-      <span class="form-hint">Leave blank to keep existing value</span>
+      <!-- Email -->
+      <div class="form-group span2">
+        <label class="field-label" for="emailInput">Email Address</label>
+        <input id="emailInput" type="email" placeholder="you@example.com" />
+        <span class="form-hint">Leave blank to keep existing value</span>
+      </div>
+
+      <!-- Referrer IR ID -->
+      <div class="form-group">
+        <label class="field-label" for="referrerIdInput">Referrer IR ID</label>
+        <input
+          id="referrerIdInput"
+          type="text"
+          placeholder="e.g. AB506666"
+          maxlength="30"
+          spellcheck="false"
+          oninput="onReferrerInput()"
+        />
+        <span id="refStatus" class="ref-status hidden"></span>
+        <span class="form-hint">Enter to auto-fill Referrer Name</span>
+      </div>
+
+      <!-- Referrer Name -->
+      <div class="form-group">
+        <label class="field-label" for="referrerNameInput">Referrer Name</label>
+        <input
+          id="referrerNameInput"
+          type="text"
+          placeholder="Auto-filled from database"
+          spellcheck="false"
+        />
+        <span id="refNameHint" class="form-hint">Will auto-fill when IR ID is found</span>
+      </div>
+
     </div>
 
     <div class="form-actions">
-      <button id="saveBtn" class="btn-primary" onclick="doUpdate()">Save Details</button>
-      <button class="btn-secondary" onclick="resetAll()">Search Again</button>
+      <button id="saveBtn" class="btn-orange" onclick="doUpdate()">Save Details</button>
+      <button class="btn-ghost" onclick="resetAll()">← Search Again</button>
     </div>
   </div>
 
-  <footer>MAGIC AI Genealogy Portal &mdash; Data is read directly from Google Sheets</footer>
+  <footer>MAGIC AI Genealogy Portal &mdash; Data read directly from Google Sheets</footer>
 
   <script>
-    // ── CONFIG ── Paste your Apps Script Web App URL here ────
-    var APPS_SCRIPT_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+    // ── CONFIG ────────────────────────────────────────────────
+    var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrmZhpm5kx5rOF32RNB92WrOwy7DzDKOz2ZroJK-kujz0JVuhn3FvhSaTEMrXrbia6/exec';
     // ─────────────────────────────────────────────────────────
 
-    var currentIrId = '';
-    var callbackIdx = 0;
-    var acDebounce  = null;
-    var acActiveIdx = -1;
+    var currentIrId  = '';   // base 8-char IR ID currently loaded
+    var selectedTab  = '';   // VAmbassador tab name
+    var callbackIdx  = 0;
+    var acDebounce   = null;
+    var refDebounce  = null;
+    var acActiveIdx  = -1;
+
+    var searchInput       = document.getElementById('searchInput');
+    var searchBtn         = document.getElementById('searchBtn');
+    var acList            = document.getElementById('acList');
+    var referrerIdInput   = document.getElementById('referrerIdInput');
+    var referrerNameInput = document.getElementById('referrerNameInput');
+    var refStatus         = document.getElementById('refStatus');
+    var refNameHint       = document.getElementById('refNameHint');
+
+    // ── VAmbassador select ────────────────────────────────────
+    function onVambChange() {
+      selectedTab = document.getElementById('vambSelect').value;
+      var ok = !!selectedTab;
+      searchInput.disabled = !ok;
+      searchBtn.disabled   = !ok;
+      searchInput.value    = '';
+      hideAC();
+      document.getElementById('resultsCard').classList.add('hidden');
+      clearAlert('searchAlert');
+      if (ok) searchInput.focus();
+    }
 
     // ── AUTOCOMPLETE ─────────────────────────────────────────
-    var searchInput = document.getElementById('searchInput');
-    var acList      = document.getElementById('acList');
-
     searchInput.addEventListener('input', function() {
-      var val = searchInput.value.trim().toUpperCase();
+      var val = searchInput.value.trim();
       clearTimeout(acDebounce);
       if (val.length < 3) { hideAC(); return; }
-      acDebounce = setTimeout(function() { fetchSuggestions(val); }, 400);
+      acDebounce = setTimeout(function() { fetchAC(val); }, 400);
     });
 
     searchInput.addEventListener('keydown', function(e) {
@@ -265,17 +381,15 @@
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         acActiveIdx = Math.min(acActiveIdx + 1, items.length - 1);
-        highlightAC(items);
+        setACActive(items);
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         acActiveIdx = Math.max(acActiveIdx - 1, -1);
-        highlightAC(items);
+        setACActive(items);
       } else if (e.key === 'Enter') {
-        if (acActiveIdx >= 0 && items[acActiveIdx]) {
-          items[acActiveIdx].click();
-        } else {
-          doSearch();
-        }
+        e.preventDefault();
+        if (acActiveIdx >= 0 && items[acActiveIdx]) items[acActiveIdx].click();
+        else doSearch();
       } else if (e.key === 'Escape') {
         hideAC();
       }
@@ -285,44 +399,34 @@
       if (!e.target.closest('.search-wrap')) hideAC();
     });
 
-    function fetchSuggestions(prefix) {
-      if (APPS_SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') return;
-      showACLoading();
-      jsonp(APPS_SCRIPT_URL, { action: 'autocomplete', prefix: prefix }, function(res) {
+    function fetchAC(prefix) {
+      if (!isConfigured()) return;
+      acList.innerHTML = '<div class="ac-msg">Searching…</div>';
+      acList.classList.remove('hidden');
+      acActiveIdx = -1;
+      jsonp(APPS_SCRIPT_URL, { action: 'autocomplete', prefix: prefix.toUpperCase(), tab: selectedTab }, function(res) {
         if (!res.results || res.results.length === 0) { hideAC(); return; }
-        renderAC(res.results);
-      });
-    }
-
-    function showACLoading() {
-      acList.innerHTML = '<div class="ac-loading">Searching…</div>';
-      acList.classList.remove('hidden');
-      acActiveIdx = -1;
-    }
-
-    function renderAC(results) {
-      acList.innerHTML = '';
-      acActiveIdx = -1;
-      results.forEach(function(r) {
-        var item = document.createElement('div');
-        item.className = 'ac-item';
-        item.innerHTML =
-          '<span class="ac-id">' + esc(r.ir_id) + '</span>' +
-          '<span class="ac-name">' + esc(r.name) + '</span>';
-        item.addEventListener('click', function() {
-          searchInput.value = r.ir_id;
-          hideAC();
-          doSearch();
+        acList.innerHTML = '';
+        acActiveIdx = -1;
+        res.results.forEach(function(r) {
+          var item = document.createElement('div');
+          item.className = 'ac-item';
+          item.innerHTML =
+            '<span class="ac-id">'   + esc(r.ir_id)   + '</span>' +
+            '<span class="ac-name">' + esc(r.ir_name) + '</span>';
+          item.addEventListener('click', function() {
+            searchInput.value = r.ir_id;
+            hideAC();
+            doSearch();
+          });
+          acList.appendChild(item);
         });
-        acList.appendChild(item);
+        acList.classList.remove('hidden');
       });
-      acList.classList.remove('hidden');
     }
 
-    function highlightAC(items) {
-      items.forEach(function(el, i) {
-        el.classList.toggle('active', i === acActiveIdx);
-      });
+    function setACActive(items) {
+      items.forEach(function(el, i) { el.classList.toggle('active', i === acActiveIdx); });
     }
 
     function hideAC() {
@@ -337,98 +441,190 @@
       clearAlert('searchAlert');
       hideAC();
 
+      if (!selectedTab) {
+        showAlert('searchAlert', 'error', 'Please select a VAmbassador first.');
+        return;
+      }
       if (!rawId || rawId.length < 2) {
         showAlert('searchAlert', 'error', 'Please enter a valid IR ID.');
         return;
       }
-      if (APPS_SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+      if (!isConfigured()) {
         showAlert('searchAlert', 'error', '⚠️ Setup needed: paste your Apps Script Web App URL into index.html.');
         return;
       }
 
       setSearchLoading(true);
-      jsonp(APPS_SCRIPT_URL, { action: 'search', ir_id: rawId }, function(res) {
+      jsonp(APPS_SCRIPT_URL, { action: 'search', ir_id: rawId, tab: selectedTab }, function(res) {
         setSearchLoading(false);
         if (res.error) { showAlert('searchAlert', 'error', res.error); return; }
         if (!res.found) {
-          showAlert('searchAlert', 'error', 'No record found for "' + rawId + '". Please check and try again.');
+          showAlert('searchAlert', 'error',
+            'No record found for "' + rawId + '" under ' + selectedTab + '. Check the IR ID or VAmbassador.');
           return;
         }
-        currentIrId = rawId;
+        currentIrId = res.baseId || rawId.substring(0, 8).toUpperCase();
         renderResults(res.data, res.allRows || [res.data]);
       });
     }
 
     // ── RENDER RESULTS ───────────────────────────────────────
-    function renderResults(primary, allRows) {
-      var grid = document.getElementById('infoGrid');
-      grid.innerHTML = '';
+    function renderResults(d, allRows) {
+      // Big header
+      document.getElementById('displayIrId').textContent   = currentIrId;
+      document.getElementById('displayIrName').textContent = d.ir_name || '—';
 
-      [
-        { label: 'IR ID',           value: primary.ir_id },
-        { label: 'Full Name',        value: primary.name },
-        { label: 'Level',            value: primary.level, badge: true },
-        { label: 'Left / Right',     value: primary.left_right || '—' },
-        { label: 'BV',               value: primary.bv },
-        { label: 'RSP Total',        value: primary.rsp_total },
-        { label: 'Parent IR ID',     value: primary.parent_ir_id || '—' },
-        { label: 'Parent Name',      value: primary.parent_name  || '—' },
-        { label: 'Direct Downlines', value: primary.direct_downlines },
-        { label: 'Source',           value: primary.source || '—' },
-      ].forEach(function(f) {
-        var item = document.createElement('div');
-        item.className = 'info-item';
-        item.innerHTML =
-          '<span class="info-label">' + esc(f.label) + '</span>' +
-          (f.badge
-            ? '<span class="badge">'      + esc(f.value) + '</span>'
-            : '<span class="info-value">' + esc(f.value) + '</span>');
-        grid.appendChild(item);
-      });
-
+      // Multi-row notice
       var notice = document.getElementById('rowsNotice');
       if (allRows.length > 1) {
-        notice.textContent = 'ℹ️ ' + allRows.length + ' rows share this IR ID (TC variants). Saving will update all of them.';
+        notice.textContent =
+          'ℹ️ Found ' + allRows.length + ' tracking rows for IR ID ' + currentIrId +
+          ' (e.g. ' + (allRows[0] ? allRows[0].ir_id : '') + ', ' +
+          (allRows[1] ? allRows[1].ir_id : '') + ', …). ' +
+          'Saving will update ALL ' + allRows.length + ' rows at once.';
         notice.classList.remove('hidden');
       } else {
         notice.classList.add('hidden');
       }
 
-      document.getElementById('emailInput').value    = primary.email          || '';
-      document.getElementById('referrerInput').value = primary.referrer_ir_id || '';
+      // Info grid
+      var grid = document.getElementById('infoGrid');
+      grid.innerHTML = '';
+
+      var statusCls = (String(d.ir_status).toLowerCase().includes('active') &&
+                       !String(d.ir_status).toLowerCase().includes('inactive'))
+                      ? 'status-active' : 'status-inactive';
+
+      var fields = [
+        { label: 'Depth',         html: '<span class="badge-depth">' + esc(d.depth || '0') + '</span>' },
+        { label: 'Position',      html: d.position ? '<span class="tag-pos">' + esc(d.position) + '</span>' : '<span class="info-value">—</span>' },
+        { label: 'Parent IR ID',  html: '<span class="info-value">' + esc(d.parent_ir_id || '—') + '</span>' },
+        { label: 'BV',            html: '<span class="info-value num">' + esc(d.bv) + '</span>' },
+        { label: 'Left Volume',   html: '<span class="info-value num">' + esc(d.left_volume) + '</span>' },
+        { label: 'Right Volume',  html: '<span class="info-value num">' + esc(d.right_volume) + '</span>' },
+        { label: 'IR Status',     html: '<span class="info-value ' + statusCls + '">' + esc(d.ir_status || '—') + '</span>' },
+        { label: 'Sponsor ID',    html: '<span class="info-value">' + esc(d.sponsor_id || '—') + '</span>' },
+      ];
+
+      fields.forEach(function(f) {
+        var item = document.createElement('div');
+        item.className = 'info-item';
+        item.innerHTML = '<span class="info-label">' + esc(f.label) + '</span>' + f.html;
+        grid.appendChild(item);
+      });
+
+      // Pre-fill existing values in form
+      document.getElementById('emailInput').value = d.email_id || '';
+      referrerIdInput.value   = d.referrer_id   || '';
+      referrerNameInput.value = d.referrer_name || '';
+      resetRefUI();
+
+      // If referrer already saved, mark as found
+      if (d.referrer_id && d.referrer_name) {
+        referrerIdInput.classList.add('is-found');
+        referrerNameInput.readOnly = true;
+        setRefStatus('ref-found', '✅ ' + d.referrer_name + ' (already saved)');
+      }
 
       clearAlert('updateAlert');
       document.getElementById('resultsCard').classList.remove('hidden');
       document.getElementById('resultsCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    // ── REFERRER LOOKUP ───────────────────────────────────────
+    function onReferrerInput() {
+      var val = referrerIdInput.value.trim().toUpperCase();
+      clearTimeout(refDebounce);
+      resetRefUI();
+      if (val.length < 3) return;
+      refDebounce = setTimeout(function() { lookupReferrer(val); }, 500);
+    }
+
+    function lookupReferrer(refId) {
+      setRefStatus('ref-loading', '🔍 Looking up referrer…');
+      jsonp(APPS_SCRIPT_URL, {
+        action: 'lookup_referrer',
+        referrer_id: refId,
+        tab: selectedTab
+      }, function(res) {
+        if (res.found && res.ir_name) {
+          referrerNameInput.value    = res.ir_name;
+          referrerNameInput.readOnly = true;
+          referrerIdInput.classList.add('is-found');
+          referrerIdInput.classList.remove('is-missing');
+          setRefStatus('ref-found', '✅ Found: ' + res.ir_name);
+          refNameHint.textContent = 'Auto-filled from database';
+        } else {
+          referrerNameInput.value    = '';
+          referrerNameInput.readOnly = false;
+          referrerIdInput.classList.remove('is-found');
+          referrerIdInput.classList.add('is-missing');
+          setRefStatus('ref-missing', '⚠️ IR ID not found — enter Referrer Name manually');
+          referrerNameInput.placeholder = 'Type referrer name manually';
+          refNameHint.textContent = 'Not in database — please enter manually';
+          referrerNameInput.focus();
+        }
+      });
+    }
+
+    function setRefStatus(cls, msg) {
+      refStatus.className = 'ref-status ' + cls;
+      refStatus.textContent = msg;
+      refStatus.classList.remove('hidden');
+    }
+
+    function resetRefUI() {
+      refStatus.classList.add('hidden');
+      refStatus.textContent = '';
+      referrerIdInput.classList.remove('is-found', 'is-missing');
+      referrerNameInput.readOnly    = false;
+      referrerNameInput.placeholder = 'Auto-filled from database';
+      refNameHint.textContent       = 'Will auto-fill when IR ID is found';
+    }
+
     // ── UPDATE ───────────────────────────────────────────────
     function doUpdate() {
-      var email    = document.getElementById('emailInput').value.trim();
-      var referrer = document.getElementById('referrerInput').value.trim().toUpperCase();
+      var email        = document.getElementById('emailInput').value.trim();
+      var referrerId   = referrerIdInput.value.trim().toUpperCase();
+      var referrerName = referrerNameInput.value.trim();
       clearAlert('updateAlert');
 
-      if (!email && !referrer) {
-        showAlert('updateAlert', 'error', 'Please enter at least an email or a referrer IR ID.');
+      if (!email && !referrerId) {
+        showAlert('updateAlert', 'error', 'Please enter at least an Email Address or a Referrer IR ID.');
         return;
       }
       if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         showAlert('updateAlert', 'error', 'Please enter a valid email address.');
         return;
       }
+      if (referrerId && !referrerName) {
+        showAlert('updateAlert', 'error',
+          'Referrer Name is required. Wait for auto-fill or enter the name manually.');
+        return;
+      }
 
       setSaveLoading(true);
-      jsonp(APPS_SCRIPT_URL, { action: 'update', ir_id: currentIrId, email: email, referrer: referrer }, function(res) {
+      jsonp(APPS_SCRIPT_URL, {
+        action:        'update',
+        ir_id:         currentIrId,
+        tab:           selectedTab,
+        email:         email,
+        referrer_id:   referrerId,
+        referrer_name: referrerName,
+      }, function(res) {
         setSaveLoading(false);
         if (res.error) { showAlert('updateAlert', 'error', res.error); return; }
-        showAlert('updateAlert', 'success', '✅ ' + (res.message || 'Saved successfully!'));
+        showAlert('updateAlert', 'success', '✅ ' + (res.message || 'Details saved successfully!'));
+        // Scroll to the success message
+        document.getElementById('updateAlert').scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     }
 
     // ── JSONP ─────────────────────────────────────────────────
     function jsonp(url, params, callback) {
-      var cbName = '__mpCb' + (++callbackIdx) + '_' + Date.now();
+      var cbName = '__cb' + (++callbackIdx) + '_' + Date.now();
       var timer;
+      var script = document.createElement('script');
 
       window[cbName] = function(data) {
         clearTimeout(timer);
@@ -442,13 +638,12 @@
         .map(function(k) { return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]); })
         .join('&');
 
-      var script = document.createElement('script');
       script.src = url + '?' + qs;
       script.onerror = function() {
         clearTimeout(timer);
         delete window[cbName];
         try { document.head.removeChild(script); } catch(e) {}
-        callback({ error: 'Network error. Check your Apps Script URL and deployment settings.' });
+        callback({ error: 'Network error. Make sure the Web App is deployed with "Who has access: Anyone".' });
       };
 
       timer = setTimeout(function() {
@@ -457,12 +652,15 @@
           try { document.head.removeChild(script); } catch(e) {}
           callback({ error: 'Request timed out. The sheet may still be loading — please try again.' });
         }
-      }, 30000); // 30 second timeout
+      }, 30000);
 
       document.head.appendChild(script);
     }
 
-    // ── UI Helpers ────────────────────────────────────────────
+    // ── Helpers ───────────────────────────────────────────────
+    function isConfigured() {
+      return APPS_SCRIPT_URL !== 'PASTE_YOUR_WEB_APP_URL_HERE';
+    }
     function showAlert(id, type, msg) {
       var el = document.getElementById(id);
       el.className = 'alert alert-' + type;
@@ -475,13 +673,13 @@
       el.textContent = '';
     }
     function setSearchLoading(on) {
-      document.getElementById('searchBtn').disabled = on;
-      document.getElementById('searchInput').disabled = on;
-      document.getElementById('searchBtn').innerHTML = on ? '<span class="spinner"></span>Searching…' : 'Search';
+      searchBtn.disabled   = on;
+      searchInput.disabled = on;
+      searchBtn.innerHTML  = on ? '<span class="spinner"></span>Searching…' : 'Search';
     }
     function setSaveLoading(on) {
       var btn = document.getElementById('saveBtn');
-      btn.disabled = on;
+      btn.disabled  = on;
       btn.innerHTML = on ? '<span class="spinner"></span>Saving…' : 'Save Details';
     }
     function resetAll() {
@@ -491,6 +689,9 @@
       clearAlert('updateAlert');
       currentIrId = '';
       hideAC();
+      resetRefUI();
+      referrerNameInput.value = '';
+      document.getElementById('emailInput').value = '';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     function esc(str) {
