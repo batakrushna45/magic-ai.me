@@ -209,9 +209,9 @@
         <div class="inputs">
           <label><span class="label">Currency</span>
             <select id="currency">
-              <option value="INR ">INR</option>
-              <option value="USD ">USD</option>
-              <option value="NPR ">NPR</option>
+              <option value="USD" selected>USD</option>
+              <option value="INR">INR</option>
+              <option value="NPR">NPR</option>
             </select>
           </label>
           <label><span class="label">Calculation tree levels</span><input id="levels" type="number" min="1" max="5000" value="5"></label>
@@ -294,7 +294,10 @@
   </div>
 
   <script>
-    const ranks = [
+    const currencyRates = { USD: 1, INR: 100, NPR: 150 };
+    const currencyLabels = { USD: 'USD ', INR: 'INR ', NPR: 'NPR ' };
+    let activeCurrency = 'USD';
+    const usdRanks = [
       ['Bronze', 200],
       ['Silver', 225],
       ['Gold', 250],
@@ -303,7 +306,8 @@
       ['Diamond', 325],
       ['Blue Diamond', 350],
     ];
-    const rankValue = Object.fromEntries(ranks);
+    const ranks = usdRanks.map(([rank]) => [rank, 0]);
+    let rankValue = {};
     let depthPreloads = [
       { depth: 1, nodeCount: 0, left: 0, right: 0 },
       { depth: 2, nodeCount: 0, left: 0, right: 0 },
@@ -316,7 +320,8 @@
     const num = (id) => Number($(id).value || 0);
     const big2 = (exp) => 1n << BigInt(exp);
     const fmt = (v) => v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    const money = (v) => `${$('currency').value || '$'}${fmt(v)}`;
+    const rate = () => currencyRates[$('currency').value] || 1;
+    const money = (v) => `${currencyLabels[$('currency').value] || 'USD '}${fmt(v)}`;
     const depthOf = (nodeId) => Math.floor(Math.log2(nodeId)) + 1;
     const higherRank = (current, candidate) => ranks.findIndex(r => r[0] === candidate) > ranks.findIndex(r => r[0] === current) ? candidate : current;
     function qualifyRank(steps, childRanks) {
@@ -364,7 +369,30 @@
         <td><button class="secondary" onclick="manualNodes.splice(${i},1); renderEditableRows(); calculate()">Remove</button></td>
       </tr>`).join('');
     }
+    function refreshRankValues() {
+      const currentRate = rate();
+      for (let i = 0; i < usdRanks.length; i++) {
+        ranks[i][1] = usdRanks[i][1] * currentRate;
+      }
+      rankValue = Object.fromEntries(ranks);
+      $('rankGrid').innerHTML = ranks.map(([r, v]) => `<div class="rank"><span>${r}</span><strong>${money(BigInt(v))}</strong></div>`).join('');
+    }
+    function switchCurrency() {
+      const newCurrency = $('currency').value;
+      const oldRate = currencyRates[activeCurrency] || 1;
+      const newRate = currencyRates[newCurrency] || 1;
+      const multiplier = newRate / oldRate;
+      ['uvPrice'].forEach((id) => {
+        const input = $(id);
+        const next = Math.round(Number(input.value || 0) * multiplier);
+        input.value = Math.max(1, next);
+      });
+      activeCurrency = newCurrency;
+      refreshRankValues();
+      calculate();
+    }
     function calculate() {
+      refreshRankValues();
       const levels = Math.max(1, Math.min(5000, num('levels')));
       const uvPrice = BigInt(Math.max(1, num('uvPrice')));
       const leftReq = BigInt(Math.max(1, num('leftReq')));
@@ -438,11 +466,12 @@
       }
       $('sampleTree').innerHTML = rows.join('');
     }
-    $('rankGrid').innerHTML = ranks.map(([r, v]) => `<div class="rank"><span>${r}</span><strong>$${v}</strong></div>`).join('');
     $('addDepth').onclick = () => { depthPreloads.push({ depth: 1, nodeCount: 0, left: 0, right: 0 }); renderEditableRows(); calculate(); };
     $('addManual').onclick = () => { manualNodes.push({ nodeId: 1, oldLeft: 0, oldRight: 0, newLeft: 0, newRight: 0 }); renderEditableRows(); calculate(); };
-    document.querySelectorAll('aside input, aside select').forEach(input => input.addEventListener('input', calculate));
+    $('currency').addEventListener('change', switchCurrency);
+    document.querySelectorAll('aside input').forEach(input => input.addEventListener('input', calculate));
     renderEditableRows();
+    refreshRankValues();
     calculate();
   </script>
 </body>
