@@ -129,6 +129,13 @@
       padding: 9px 12px;
     }
     button.secondary { background: #27272a; color: #e4e4e7; }
+    button.reset {
+      width: 100%;
+      margin-top: 6px;
+      background: #3f1d0b;
+      color: #fed7aa;
+      border: 1px solid rgba(249,115,22,.32);
+    }
     .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
     .rank-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     .rank { min-width: 0; border: 1px solid rgba(249,115,22,.18); background: rgba(249,115,22,.08); border-radius: 12px; padding: 9px 10px; display: flex; justify-content: space-between; gap: 12px; }
@@ -228,6 +235,7 @@
           <label><span class="label">Preload right UV in every node</span><input id="preloadAllRight" type="number" min="0" value="0"></label>
           <div class="calc-link-card">High-depth calculation is aggregated by depth, so you can test 1000+ levels. For very high levels, the page shows a depth summary instead of trying to draw every individual node.</div>
           <div class="hint">Old/preloaded UV is used for payout qualification only. It is not included in current inflow.</div>
+          <button id="resetCalculator" type="button" class="reset">Reset to default values</button>
         </div>
       </aside>
 
@@ -308,14 +316,31 @@
     ];
     const ranks = usdRanks.map(([rank]) => [rank, 0]);
     let rankValue = {};
-    let depthPreloads = [
+    const defaultInputs = {
+      currency: 'USD',
+      levels: 5,
+      displayLevels: 5,
+      uvPrice: 500,
+      leftReq: 3,
+      rightReq: 3,
+      maxSteps: 100,
+      commissionCap: 40,
+      manufacturing: 30,
+      expenses: 10,
+      targetProfit: 20,
+      preloadAllLeft: 0,
+      preloadAllRight: 0,
+    };
+    const defaultDepthPreloads = [
       { depth: 1, nodeCount: 0, left: 0, right: 0 },
       { depth: 2, nodeCount: 0, left: 0, right: 0 },
     ];
-    let manualNodes = [
+    const defaultManualNodes = [
       { nodeId: 1, oldLeft: 0, oldRight: 0, newLeft: 0, newRight: 0 },
       { nodeId: 2, oldLeft: 0, oldRight: 0, newLeft: 0, newRight: 0 },
     ];
+    let depthPreloads = defaultDepthPreloads.map(row => ({ ...row }));
+    let manualNodes = defaultManualNodes.map(row => ({ ...row }));
     const $ = (id) => document.getElementById(id);
     const num = (id) => Number($(id).value || 0);
     const big2 = (exp) => 1n << BigInt(exp);
@@ -388,6 +413,17 @@
         input.value = Math.max(1, next);
       });
       activeCurrency = newCurrency;
+      refreshRankValues();
+      calculate();
+    }
+    function resetCalculator() {
+      for (const [id, value] of Object.entries(defaultInputs)) {
+        $(id).value = value;
+      }
+      activeCurrency = defaultInputs.currency;
+      depthPreloads = defaultDepthPreloads.map(row => ({ ...row }));
+      manualNodes = defaultManualNodes.map(row => ({ ...row }));
+      renderEditableRows();
       refreshRankValues();
       calculate();
     }
@@ -468,6 +504,7 @@
     }
     $('addDepth').onclick = () => { depthPreloads.push({ depth: 1, nodeCount: 0, left: 0, right: 0 }); renderEditableRows(); calculate(); };
     $('addManual').onclick = () => { manualNodes.push({ nodeId: 1, oldLeft: 0, oldRight: 0, newLeft: 0, newRight: 0 }); renderEditableRows(); calculate(); };
+    $('resetCalculator').onclick = resetCalculator;
     $('currency').addEventListener('change', switchCurrency);
     document.querySelectorAll('aside input').forEach(input => input.addEventListener('input', calculate));
     renderEditableRows();
