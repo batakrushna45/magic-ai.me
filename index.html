@@ -46,6 +46,23 @@
     .logo-text { font-size: 26px; font-weight: 800; }
     .logo-text span { color: var(--orange); }
     header p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .calculator-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 14px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,107,0,.35);
+      background: rgba(255,107,0,.12);
+      color: var(--orange-lite);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      transition: background .15s, transform .1s;
+    }
+    .calculator-cta:hover { background: rgba(255,107,0,.20); }
+    .calculator-cta:active { transform: scale(.98); }
 
     /* ── Card ───────────────────────────────────────────────── */
     .card {
@@ -220,6 +237,7 @@
       <div class="logo-text"><span>MAGIC</span> AI Portal</div>
     </div>
     <p>Select your VAmbassador · Search your IR ID · Update your details</p>
+    <a class="calculator-cta" href="/calculator/">Open MAGIC Calculator →</a>
   </header>
 
   <!-- ── Card 1: Select + Search ─────────────────────────────── -->
