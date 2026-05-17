@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MAGIC Calculator</title>
+  <style>
+    :root {
+      --bg: #080808;
+      --card: #131313;
+      --card2: #1b1b1b;
+      --line: rgba(255,255,255,.10);
+      --orange: #f97316;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #eab308;
+      --text: #ffffff;
+      --muted: #a1a1aa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(249,115,22,.22), transparent 28rem),
+        radial-gradient(circle at 88% 18%, rgba(34,197,94,.12), transparent 24rem),
+        linear-gradient(180deg, #070707 0%, #101010 100%);
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1360px; margin: 0 auto; padding: 28px 18px 56px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo {
+      width: 40px; height: 40px; border-radius: 14px;
+      display: grid; place-items: center; font-weight: 900;
+      background: linear-gradient(135deg, #fb923c, #ea580c);
+      box-shadow: 0 0 22px rgba(249,115,22,.38);
+    }
+    .brand-title { font-weight: 900; line-height: 1; }
+    .brand-sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .portal-link {
+      border: 1px solid rgba(249,115,22,.34);
+      background: rgba(249,115,22,.12);
+      color: #fed7aa;
+      padding: 10px 14px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .hero {
+      border: 1px solid rgba(249,115,22,.28);
+      background: linear-gradient(135deg, rgba(249,115,22,.20), rgba(20,20,20,.90), rgba(34,197,94,.10));
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.32);
+    }
+    .pill {
+      display: inline-flex; border: 1px solid rgba(249,115,22,.34);
+      background: rgba(249,115,22,.12); color: #fed7aa;
+      border-radius: 999px; padding: 6px 12px;
+      font-size: 12px; font-weight: 900; letter-spacing: .08em;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    h1 { font-size: clamp(34px, 5vw, 58px); line-height: 1.02; margin: 0 0 12px; letter-spacing: -.03em; }
+    .hero p { margin: 0; color: #d4d4d8; max-width: 850px; line-height: 1.65; }
+    .grid { display: grid; gap: 18px; }
+    .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 22px; }
+    .metric, .card {
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(255,255,255,.065), rgba(255,255,255,.025));
+      border-radius: 20px;
+      box-shadow: 0 18px 44px rgba(0,0,0,.22);
+    }
+    .metric { padding: 18px; min-width: 0; }
+    .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; font-weight: 900; }
+    .value { margin-top: 8px; font-size: 24px; font-weight: 950; overflow-wrap: anywhere; }
+    .status-safe { color: var(--green); }
+    .status-warning { color: var(--yellow); }
+    .status-burst { color: var(--red); }
+    .layout { grid-template-columns: 370px minmax(0, 1fr); margin-top: 22px; align-items: start; }
+    .card { padding: 18px; background-color: rgba(18,18,18,.94); }
+    h2 { margin: 0 0 14px; font-size: 18px; }
+    .inputs { display: grid; gap: 12px; }
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #1a1a1a;
+      color: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      outline: none;
+      font-size: 14px;
+    }
+    input:focus { border-color: rgba(249,115,22,.85); box-shadow: 0 0 0 3px rgba(249,115,22,.16); }
+    .hint { color: var(--muted); font-size: 12px; line-height: 1.5; margin-top: -4px; }
+    .content { display: grid; gap: 18px; }
+    .table-scroll { overflow: auto; max-height: 440px; border-radius: 14px; border: 1px solid rgba(255,255,255,.06); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 680px; }
+    th {
+      position: sticky; top: 0; z-index: 1;
+      background: #1d1d1d; color: #a1a1aa;
+      text-transform: uppercase; letter-spacing: .06em; font-size: 11px;
+      text-align: left; padding: 10px;
+    }
+    td { border-top: 1px solid rgba(255,255,255,.07); padding: 9px 10px; color: #f4f4f5; }
+    td input { min-width: 90px; padding: 8px; }
+    .row-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+    button {
+      cursor: pointer;
+      border: 0;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 900;
+      border-radius: 12px;
+      padding: 9px 12px;
+    }
+    button.secondary { background: #27272a; color: #e4e4e7; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .rank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .rank { border: 1px solid rgba(249,115,22,.18); background: rgba(249,115,22,.08); border-radius: 12px; padding: 9px 10px; display: flex; justify-content: space-between; gap: 12px; }
+    @media (max-width: 980px) {
+      .metrics, .layout, .two { grid-template-columns: 1fr; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="/">
+        <div class="logo">M</div>
+        <div>
+          <div class="brand-title">Magic AI</div>
+          <div class="brand-sub">Client simulator</div>
+        </div>
+      </a>
+      <a class="portal-link" href="/">Back to Portal</a>
+    </div>
+
+    <section class="hero">
+      <div class="pill">MAGIC AI • Binary Compensation Stress Test</div>
+      <h1>MAGIC Calculator</h1>
+      <p>Test company inflow and payout pressure when old UV already exists on one side and new UV arrives on the other side. Large trees are calculated by depth, so you can stress-test deep structures without rendering every node.</p>
+    </section>
+
+    <section class="grid metrics">
+      <div class="metric"><div class="label">Status</div><div id="status" class="value">SAFE</div></div>
+      <div class="metric"><div class="label">Total nodes</div><div id="totalNodes" class="value">0</div></div>
+      <div class="metric"><div class="label">Payable steps</div><div id="payableSteps" class="value">0</div></div>
+      <div class="metric"><div class="label">Actual payout</div><div id="actualPayout" class="value">$0</div></div>
+    </section>
+
+    <section class="grid layout">
+      <aside class="card">
+        <h2>Inputs</h2>
+        <div class="inputs">
+          <label><span class="label">Currency symbol</span><input id="currency" value="$"></label>
+          <label><span class="label">Calculation tree levels</span><input id="levels" type="number" min="1" max="1000" value="5"></label>
+          <label><span class="label">Sample node tree display levels</span><input id="displayLevels" type="number" min="1" max="15" value="5"></label>
+          <label><span class="label">UV price</span><input id="uvPrice" type="number" min="1" value="500"></label>
+          <label><span class="label">Left UV per step</span><input id="leftReq" type="number" min="1" value="3"></label>
+          <label><span class="label">Right UV per step</span><input id="rightReq" type="number" min="1" value="3"></label>
+          <label><span class="label">Hard max steps per node/week</span><input id="maxSteps" type="number" min="1" value="100"></label>
+          <label><span class="label">Commission cap %</span><input id="commissionCap" type="number" min="0" max="100" value="40"></label>
+          <label><span class="label">Manufacturing %</span><input id="manufacturing" type="number" min="0" max="100" value="30"></label>
+          <label><span class="label">Expenses %</span><input id="expenses" type="number" min="0" max="100" value="10"></label>
+          <label><span class="label">Target profit %</span><input id="targetProfit" type="number" min="0" max="100" value="20"></label>
+          <label><span class="label">Preload left UV in every node</span><input id="preloadAllLeft" type="number" min="0" value="0"></label>
+          <label><span class="label">Preload right UV in every node</span><input id="preloadAllRight" type="number" min="0" value="0"></label>
+          <div class="hint">Old/preloaded UV is used for payout qualification only. It is not included in current inflow.</div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="card">
+          <h2>Rank payout rules</h2>
+          <div id="rankGrid" class="rank-grid"></div>
+        </div>
+
+        <div class="card">
+          <h2>Money summary</h2>
+          <div class="table-scroll" style="max-height: none;">
+            <table>
+              <tbody id="moneyBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="two">
+          <div class="card">
+            <div class="row-actions"><h2>Preload by depth</h2><button id="addDepth">Add row</button></div>
+            <div class="hint">Use this when a number of nodes at a depth already have old left/right UV.</div>
+            <div class="table-scroll" style="max-height: 300px;">
+              <table>
+                <thead><tr><th>Depth</th><th>Node count</th><th>Old left UV / node</th><th>Old right UV / node</th><th></th></tr></thead>
+                <tbody id="depthRows"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="row-actions"><h2>Manual UV by exact node</h2><button id="addManual">Add row</button></div>
+            <div class="hint">Old UV is not inflow. New UV is inflow. Payout uses old + new UV.</div>
+            <div class="table-scroll" style="max-height: 300px;">
+              <table>
+                <thead><tr><th>Node ID</th><th>Old left</th><th>Old right</th><th>New left</th><th>New right</th><th></th></tr></thead>
+                <tbody id="manualRows"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Payout by tree depth</h2>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Depth</th><th>Nodes</th><th>Side UV</th><th>Max steps/node</th><th>Paying nodes</th><th>Total steps</th><th>Commission</th></tr></thead>
+              <tbody id="depthOutput"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Sample binary tree node IDs</h2>
+          <div class="table-scroll" style="max-height: 320px;">
+            <table>
+              <thead><tr><th>Node</th><th>Depth</th><th>Parent</th><th>Left child</th><th>Right child</th></tr></thead>
+              <tbody id="sampleTree"></tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </section>
+  </div>
+
+  <script>
+    const ranks = [
+      ['Bronze', 200],
+      ['Silver', 225],
+      ['Gold', 250],
+      ['Sapphire', 275],
+      ['Platinum', 300],
+      ['Diamond', 325],
+      ['Blue Diamond', 350],
+    ];
+    const rankValue = Object.fromEntries(ranks);
+    let depthPreloads = [
+      { depth: 1, nodeCount: 0, left: 0, right: 0 },
+      { depth: 2, nodeCount: 0, left: 0, right: 0 },
+    ];
+    let manualNodes = [
+      { nodeId: 1, oldLeft: 0, oldRight: 0, newLeft: 0, newRight: 0 },
+      { nodeId: 2, oldLeft: 0, oldRight: 0, newLeft: 0, newRight: 0 },
+    ];
+    const $ = (id) => document.getElementById(id);
+    const num = (id) => Number($(id).value || 0);
+    const big2 = (exp) => 1n << BigInt(exp);
+    const fmt = (v) => v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const money = (v) => `${$('currency').value || '$'}${fmt(v)}`;
+    const depthOf = (nodeId) => Math.floor(Math.log2(nodeId)) + 1;
+    const higherRank = (current, candidate) => ranks.findIndex(r => r[0] === candidate) > ranks.findIndex(r => r[0] === current) ? candidate : current;
+    function qualifyRank(steps, childRanks) {
+      let rank = 'Bronze';
+      if (childRanks.filter(r => r === 'Bronze').length >= 2) rank = 'Silver';
+      if (childRanks.filter(r => r === 'Silver').length >= 2) rank = 'Gold';
+      if (steps >= 10n) rank = higherRank(rank, 'Sapphire');
+      if (steps >= 30n) rank = higherRank(rank, 'Platinum');
+      if (steps >= 50n) rank = higherRank(rank, 'Diamond');
+      if (steps >= 80n) rank = higherRank(rank, 'Blue Diamond');
+      return rank;
+    }
+    function buildBuckets(nodeCount, baseOldLeft, baseOldRight, depthRows, manualRows, childRanks) {
+      const buckets = [];
+      let remaining = nodeCount;
+      for (const row of manualRows) {
+        if (remaining <= 0n) break;
+        buckets.push({ count: 1n, oldLeft: BigInt(baseOldLeft + row.oldLeft), oldRight: BigInt(baseOldRight + row.oldRight), newLeft: BigInt(row.newLeft), newRight: BigInt(row.newRight), childRanks });
+        remaining -= 1n;
+      }
+      for (const row of depthRows) {
+        if (remaining <= 0n) break;
+        const selected = BigInt(Math.max(0, row.nodeCount)) < remaining ? BigInt(Math.max(0, row.nodeCount)) : remaining;
+        if (selected <= 0n) continue;
+        buckets.push({ count: selected, oldLeft: BigInt(baseOldLeft + row.left), oldRight: BigInt(baseOldRight + row.right), newLeft: 0n, newRight: 0n, childRanks });
+        remaining -= selected;
+      }
+      if (remaining > 0n) buckets.push({ count: remaining, oldLeft: BigInt(baseOldLeft), oldRight: BigInt(baseOldRight), newLeft: 0n, newRight: 0n, childRanks });
+      return buckets;
+    }
+    function renderEditableRows() {
+      $('depthRows').innerHTML = depthPreloads.map((r, i) => `<tr>
+        <td><input type="number" min="1" value="${r.depth}" onchange="depthPreloads[${i}].depth=Number(this.value); calculate()"></td>
+        <td><input type="number" min="0" value="${r.nodeCount}" onchange="depthPreloads[${i}].nodeCount=Number(this.value); calculate()"></td>
+        <td><input type="number" min="0" value="${r.left}" onchange="depthPreloads[${i}].left=Number(this.value); calculate()"></td>
+        <td><input type="number" min="0" value="${r.right}" onchange="depthPreloads[${i}].right=Number(this.value); calculate()"></td>
+        <td><button class="secondary" onclick="depthPreloads.splice(${i},1); renderEditableRows(); calculate()">Remove</button></td>
+      </tr>`).join('');
+      $('manualRows').innerHTML = manualNodes.map((r, i) => `<tr>
+        <td><input type="number" min="1" value="${r.nodeId}" onchange="manualNodes[${i}].nodeId=Number(this.value); calculate()"></td>
+        <td><input type="number" min="0" value="${r.oldLeft}" onchange="manualNodes[${i}].oldLeft=Number(this.value); calculate()"></td>
+        <td><input type="number" min="0" value="${r.oldRight}" onchange="manualNodes[${i}].oldRight=Number(this.value); calculate()"></td>
+        <td><input type="number" min="0" value="${r.newLeft}" onchange="manualNodes[${i}].newLeft=Number(this.value); calculate()"></td>
+        <td><input type="number" min="0" value="${r.newRight}" onchange="manualNodes[${i}].newRight=Number(this.value); calculate()"></td>
+        <td><button class="secondary" onclick="manualNodes.splice(${i},1); renderEditableRows(); calculate()">Remove</button></td>
+      </tr>`).join('');
+    }
+    function calculate() {
+      const levels = Math.max(1, Math.min(1000, num('levels')));
+      const uvPrice = BigInt(Math.max(1, num('uvPrice')));
+      const leftReq = BigInt(Math.max(1, num('leftReq')));
+      const rightReq = BigInt(Math.max(1, num('rightReq')));
+      const maxSteps = BigInt(Math.max(1, num('maxSteps')));
+      const totalNodes = big2(levels) - 1n;
+      const leftNodes = (totalNodes - 1n) / 2n;
+      const manualByDepth = new Map();
+      for (const row of manualNodes) {
+        if (row.nodeId >= 1 && (row.oldLeft || row.oldRight || row.newLeft || row.newRight)) {
+          const d = depthOf(row.nodeId);
+          if (d <= levels) manualByDepth.set(d, [...(manualByDepth.get(d) || []), row]);
+        }
+      }
+      let totalSteps = 0n, payingNodes = 0n, newUv = 0n, preLeft = 0n, preRight = 0n, formula = 0n;
+      let childRanks = [null, null];
+      const rows = [];
+      for (let depth = levels; depth >= 1; depth--) {
+        const nodeCount = big2(depth - 1);
+        const sideUv = depth < levels ? big2(levels - depth) - 1n : 0n;
+        const buckets = buildBuckets(nodeCount, num('preloadAllLeft'), num('preloadAllRight'), depthPreloads.filter(r => r.depth === depth && r.nodeCount > 0), manualByDepth.get(depth) || [], childRanks);
+        const rankCounts = Object.fromEntries(ranks.map(r => [r[0], 0n]));
+        let dSteps = 0n, dPaying = 0n, dCommission = 0n, dPreLeft = 0n, dPreRight = 0n, maxDepthSteps = 0n;
+        for (const b of buckets) {
+          const leftUv = sideUv + b.oldLeft + b.newLeft;
+          const rightUv = sideUv + b.oldRight + b.newRight;
+          const raw = leftUv / leftReq < rightUv / rightReq ? leftUv / leftReq : rightUv / rightReq;
+          const payable = raw < maxSteps ? raw : maxSteps;
+          const rank = qualifyRank(payable, b.childRanks);
+          rankCounts[rank] += b.count;
+          dSteps += payable * b.count;
+          if (payable > 0n) dPaying += b.count;
+          if (payable > maxDepthSteps) maxDepthSteps = payable;
+          dPreLeft += b.oldLeft * b.count;
+          dPreRight += b.oldRight * b.count;
+          newUv += (b.newLeft + b.newRight) * b.count;
+          dCommission += payable * BigInt(rankValue[rank]) * b.count;
+        }
+        totalSteps += dSteps; payingNodes += dPaying; preLeft += dPreLeft; preRight += dPreRight; formula += dCommission;
+        const dominant = ranks.reduce((best, r) => rankCounts[r[0]] > rankCounts[best[0]] ? r : best, ranks[0])[0];
+        childRanks = [dominant, dominant];
+        rows.unshift({ depth, nodeCount, sideUv, maxDepthSteps, dPaying, dSteps, dCommission });
+      }
+      const gross = (totalNodes + newUv) * uvPrice;
+      const maxPool = gross * BigInt(num('commissionCap')) / 100n;
+      const actual = formula < maxPool ? formula : maxPool;
+      const mfg = gross * BigInt(num('manufacturing')) / 100n;
+      const exp = gross * BigInt(num('expenses')) / 100n;
+      const target = gross * BigInt(num('targetProfit')) / 100n;
+      const retained = gross - mfg - exp - actual;
+      const status = mfg + exp + formula > gross ? 'BURST' : formula > maxPool ? 'WARNING' : retained >= target ? 'SAFE' : 'WARNING';
+      $('status').textContent = status; $('status').className = `value status-${status.toLowerCase()}`;
+      $('totalNodes').textContent = fmt(totalNodes);
+      $('payableSteps').textContent = fmt(totalSteps);
+      $('actualPayout').textContent = money(actual);
+      $('moneyBody').innerHTML = [
+        ['Gross inflow', money(gross)], ['Formula commission', money(formula)], ['Max commission pool', money(maxPool)], ['Actual commission paid', money(actual)],
+        ['Excess commission', money(formula > actual ? formula - actual : 0n)], ['Manufacturing cost', money(mfg)], ['Expenses', money(exp)], ['Target profit', money(target)],
+        ['Retained amount', money(retained)], ['Profit/loss vs target', money(retained - target)], ['New UV counted as inflow', fmt(newUv)], ['Preloaded left UV', fmt(preLeft)], ['Preloaded right UV', fmt(preRight)]
+      ].map(([a,b]) => `<tr><td>${a}</td><td><strong>${b}</strong></td></tr>`).join('');
+      $('depthOutput').innerHTML = rows.map(r => `<tr><td>${r.depth}</td><td>${fmt(r.nodeCount)}</td><td>${fmt(r.sideUv)}</td><td>${fmt(r.maxDepthSteps)}</td><td>${fmt(r.dPaying)}</td><td>${fmt(r.dSteps)}</td><td>${money(r.dCommission)}</td></tr>`).join('');
+      renderSampleTree();
+    }
+    function renderSampleTree() {
+      const levels = Math.max(1, Math.min(15, num('displayLevels')));
+      const count = Number(big2(levels) - 1n);
+      const rows = [];
+      for (let node = 1; node <= count; node++) {
+        const left = node * 2, right = left + 1;
+        rows.push(`<tr><td>${node}</td><td>${depthOf(node)}</td><td>${node > 1 ? Math.floor(node / 2) : '-'}</td><td>${left <= count ? left : '-'}</td><td>${right <= count ? right : '-'}</td></tr>`);
+      }
+      $('sampleTree').innerHTML = rows.join('');
+    }
+    $('rankGrid').innerHTML = ranks.map(([r, v]) => `<div class="rank"><span>${r}</span><strong>$${v}</strong></div>`).join('');
+    $('addDepth').onclick = () => { depthPreloads.push({ depth: 1, nodeCount: 0, left: 0, right: 0 }); renderEditableRows(); calculate(); };
+    $('addManual').onclick = () => { manualNodes.push({ nodeId: 1, oldLeft: 0, oldRight: 0, newLeft: 0, newRight: 0 }); renderEditableRows(); calculate(); };
+    document.querySelectorAll('aside input').forEach(input => input.addEventListener('input', calculate));
+    renderEditableRows();
+    calculate();
+  </script>
+</body>
+</html>
